@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dr. HOMIE | Advanced AI Healthcare</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <!-- Tailwind CSS (via CDN for local no-build execution) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        dark: '#050505',
+                        primary: '#00f2ea',
+                        secondary: '#ff0055',
+                    },
+                    fontFamily: {
+                        sans: ['Outfit', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="css/style.css">
+
+    <!-- Spline Viewer -->
+    <script type="module" src="https://unpkg.com/@splinetool/viewer@1.9.59/build/spline-viewer.js"></script>
+
+    <!-- Leaflet CSS & JS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+    <!-- Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+
+<!-- Custom Scrollbar & Utility Styles -->
+<style>
+    /* Custom Scrollbar for entire site */
+    ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+        background: #0f172a;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background: #00f2ea;
+        /* Primary Color */
+        border-radius: 4px;
+        opacity: 0.5;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+        background: #00c4bd;
+    }
+
+    /* Hide scrollbar for specific elements but keep functionality */
+    .no-scrollbar::-webkit-scrollbar {
+        display: none;
+    }
+
+    .no-scrollbar {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+</style>
+</head>
+
+<body class="bg-dark text-white overflow-x-hidden selection:bg-primary selection:text-black">
+    <!-- ... (Nav and Main remain similar) ... -->
+    <!-- ... (Nav and Main remain similar) ... -->
+
+
+
+    <!-- Navigation Bar -->
+    <nav
+        class="fixed top-0 w-full z-50 p-6 flex justify-between items-center glass-panel m-4 max-w-[95%] mx-auto backdrop-blur-md bg-black/30 border-white/10">
+        <div class="text-2xl font-bold tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-primary to-white cursor-pointer"
+            onclick="window.location.hash=''">
+            Dr. HOMIE
+        </div>
+        <div class="flex gap-8 text-sm font-semibold tracking-wide items-center">
+            <a href="#home" class="hover:text-primary transition-colors">HOME</a>
+            <a href="#chat" class="hover:text-primary transition-colors">AI DOCTOR</a>
+            <a href="#map" class="hover:text-primary transition-colors">FIND CLINICS</a>
+            <button onclick="document.getElementById('register-modal').classList.remove('hidden')"
+                class="px-4 py-2 border border-primary text-primary rounded-full hover:bg-primary hover:text-black transition-all flex items-center gap-2">
+                <i data-lucide="user-plus" class="w-4 h-4"></i> REGISTER
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Content Container -->
+    <main id="app" class="relative">
+
+        <!-- HOME VIEW (Wrapper for Hero + Services) -->
+        <div id="home" class="page-section active">
+            <!-- HERO SECTION -->
+            <section id="hero" class="min-h-screen flex flex-col items-center justify-center relative pt-20">
+
+                <!-- 3D Spline Background -->
+                <div class="absolute inset-0 z-0 opacity-60">
+                    <!-- Using a known working medical/tech spline scene url as placeholder or the user provided one if valid -->
+                    <!-- User provided: https://prod.spline.design/kZDDjO5HuC9GJUM2/scene.splinecode -->
+                    <spline-viewer url="https://prod.spline.design/kZDDjO5HuC9GJUM2/scene.splinecode"></spline-viewer>
+                </div>
+
+                <!-- Content Overlay -->
+                <div class="relative z-10 text-center max-w-4xl mx-auto px-4 mt-20">
+
+                    <!-- Warning Banner -->
+                    <div class="animate-float mb-8 inline-block">
+                        <div
+                            class="bg-red-500/10 border border-red-500/50 text-red-200 px-6 py-2 rounded-full text-sm font-bold tracking-wide backdrop-blur-md flex items-center gap-2">
+                            <i data-lucide="alert-triangle" class="w-4 h-4"></i>
+                            <span>WARNING: FOR PRE-CLINICAL SUPPORT ONLY. PREFER REAL DOCTORS FOR
+                                EMERGENCIES.</span>
+                        </div>
+                    </div>
+
+                    <h1
+                        class="text-7xl md:text-9xl font-bold bg-clip-text text-transparent bg-gradient-to-b from-white via-gray-200 to-gray-600 mb-6 tracking-tight neon-text leading-tight">
+                        Dr. HOMIE
+                    </h1>
+
+                    <p class="text-xl text-gray-400 mb-12 max-w-2xl mx-auto leading-relaxed">
+                        Advanced AI-Powered Healthcare Dashboard. <br>
+                        Real-time Diagnostics, Navigation, and Professional Support.
+                    </p>
+
+                    <div class="flex gap-4 justify-center mb-12">
+                        <button onclick="window.location.hash='chat'"
+                            class="bg-primary hover:bg-white text-black font-bold py-4 px-8 rounded-full text-lg shadow-[0_0_20px_rgba(0,242,234,0.4)] hover:shadow-[0_0_30px_rgba(255,255,255,0.6)] transition-all flex items-center gap-3">
+                            <i data-lucide="sparkles" class="w-5 h-5"></i>
+                            Start AI Diagnosis
+                        </button>
+                    </div>
+
+                    <!-- Scroll Down Indicator -->
+                    <div class="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce opacity-50 cursor-pointer"
+                        onclick="document.getElementById('services').scrollIntoView({behavior: 'smooth'})">
+                        <i data-lucide="chevron-down" class="w-8 h-8"></i>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SERVICES SECTION (Scroll to see floating buttons) -->
+            <section id="services"
+                class="min-h-screen py-20 px-4 relative z-10 bg-gradient-to-b from-transparent to-black">
+                <h2 class="text-4xl font-bold text-center mb-20 text-gradient fade-in-up">Our Services</h2>
+
+                <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 perspective-1000">
+
+                    <!-- Service Cards (Will float in) -->
+
+                    <!-- 1. AI Health Assistant -->
+                    <div class="service-card fade-in-up glass-panel p-8 hover:bg-white/5 transition-all cursor-pointer group"
+                        onclick="window.location.hash='chat'">
+                        <div
+                            class="h-12 w-12 bg-primary/20 rounded-full flex items-center justify-center mb-6 text-primary group-hover:scale-110 transition-transform">
+                            <i data-lucide="bot" class="w-6 h-6"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-3">AI Health Assistant</h3>
+                        <p class="text-gray-400 text-sm">Agentic reasoning system for pre-clinical decision support.
+                        </p>
+                    </div>
+
+
+                    <!-- 3. Nearby Clinics (Shifted) -->
+                    <!-- 2. Nearby Clinics -->
+                    <div class="service-card fade-in-up glass-panel p-8 hover:bg-white/5 transition-all cursor-pointer group"
+                        style="transition-delay: 200ms" onclick="window.location.hash='map'">
+                        <div
+                            class="h-12 w-12 bg-blue-500/20 rounded-full flex items-center justify-center mb-6 text-blue-400 group-hover:scale-110 transition-transform">
+                            <i data-lucide="map-pin" class="w-6 h-6"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-3">Nearby Care</h3>
+                        <p class="text-gray-400 text-sm">Real-time map location of hospitals and clinics.</p>
+                    </div>
+
+                    <!-- REPLACED SLOT: Maybe Pharmary or just leave empty or shift others up -->
+
+
+                    <!-- 4. Order Medicines -->
+                    <div class="service-card fade-in-up glass-panel p-8 hover:bg-white/5 transition-all cursor-pointer group"
+                        style="transition-delay: 600ms" onclick="window.location.hash='medicines'">
+                        <div
+                            class="h-12 w-12 bg-yellow-500/20 rounded-full flex items-center justify-center mb-6 text-yellow-400 group-hover:scale-110 transition-transform">
+                            <i data-lucide="pill" class="w-6 h-6"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-3">Pharmacy</h3>
+                        <p class="text-gray-400 text-sm">Order medicines with prescription upload.</p>
+                    </div>
+
+                    <!-- 5. Government Schemes -->
+                    <div class="service-card fade-in-up glass-panel p-8 hover:bg-white/5 transition-all cursor-pointer group"
+                        style="transition-delay: 800ms" onclick="window.location.hash='schemes'">
+                        <div
+                            class="h-12 w-12 bg-orange-500/20 rounded-full flex items-center justify-center mb-6 text-orange-400 group-hover:scale-110 transition-transform">
+                            <i data-lucide="building-2" class="w-6 h-6"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-3">Gov Schemes</h3>
+                        <p class="text-gray-400 text-sm">Access WHO news and Indian health schemes.</p>
+                    </div>
+
+                    <!-- 6. IoT Integration -->
+                    <div class="service-card fade-in-up glass-panel p-8 hover:bg-white/5 transition-all cursor-pointer group"
+                        style="transition-delay: 1000ms" onclick="window.location.hash='iot'">
+                        <div
+                            class="h-12 w-12 bg-purple-500/20 rounded-full flex items-center justify-center mb-6 text-purple-400 group-hover:scale-110 transition-transform">
+                            <i data-lucide="cpu" class="w-6 h-6"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-3">IoT Vitals</h3>
+                        <p class="text-gray-400 text-sm">Connect smart devices for real-time monitoring.</p>
+                    </div>
+
+                    <!-- Available Doctors (Button Only) -->
+                    <div class="service-card fade-in-up glass-panel p-8 hover:bg-white/5 transition-all cursor-pointer group"
+                        style="transition-delay: 1100ms" onclick="window.location.hash='available-doctors'">
+                        <div
+                            class="h-12 w-12 bg-green-500/20 rounded-full flex items-center justify-center mb-6 text-green-400 group-hover:scale-110 transition-transform">
+                            <i data-lucide="stethoscope" class="w-6 h-6"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-3">Available Doctors</h3>
+                        <p class="text-gray-400 text-sm">Browse specialists and book appointments instantly.</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- SEPARATE PAGES/VIEWS (Hidden by default, toggled via JS) -->
+
+        <!-- AVAILABLE DOCTORS VIEW -->
+        <section id="available-doctors" class="page-section hidden pt-24 px-4 min-h-screen">
+            <div class="max-w-7xl mx-auto">
+                <div class="text-center mb-10">
+                    <h2 class="text-4xl font-bold mb-4 flex items-center justify-center gap-3">
+                        <i data-lucide="stethoscope" class="text-green-400 w-10 h-10"></i>
+                        <span class="text-gradient">Available Doctors</span>
+                    </h2>
+                    <p class="text-gray-400 max-w-2xl mx-auto">
+                        Top certified specialists available for consultation.
+                    </p>
+                </div>
+
+                <!-- Filters -->
+                <div id="doctor-filters"
+                    class="flex flex-wrap md:flex-nowrap md:overflow-x-auto gap-4 mb-10 justify-center pb-4 px-4 scrollbar-hide">
+                    <!-- Injected via JS -->
+                    <div class="animate-pulse flex gap-4">
+                        <div class="h-10 w-24 bg-gray-800 rounded-full"></div>
+                        <div class="h-10 w-24 bg-gray-800 rounded-full"></div>
+                        <div class="h-10 w-24 bg-gray-800 rounded-full"></div>
+                    </div>
+                </div>
+
+                <!-- Doctor Grid -->
+                <div id="available-doctors-grid"
+                    class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 pb-20">
+                    <!-- Injected via JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- CHAT VIEW -->
+        <section id="chat"
+            class="page-section hidden pt-24 px-4 max-w-5xl mx-auto h-screen flex flex-col relative text-sm">
+            <!-- 3D Avatar Background Layer -->
+            <div class="absolute top-0 left-0 w-full h-[40vh] z-0 opacity-80 pointer-events-none">
+                <!-- Using a robot/tech spline scene -->
+                <spline-viewer url="https://prod.spline.design/iE3-eZ2-wWb-BqQ2/scene.splinecode"></spline-viewer>
+            </div>
+
+            <div
+                class="relative z-10 flex flex-col h-full bg-black/40 backdrop-blur-sm rounded-xl border border-white/5 overflow-hidden">
+                <div class="p-4 border-b border-white/10 bg-black/60 flex justify-between items-center">
+                    <h2 class="text-xl font-bold text-primary flex items-center gap-2">
+                        <i data-lucide="bot" class="w-6 h-6"></i>
+                        <span class="tracking-widest">MEDICAL AGENT V1</span>
+                    </h2>
+                    <div class="text-xs text-gray-400">PRE-CLINICAL ALPHA</div>
+                </div>
+                <div id="chat-container" class="flex-1 glass-panel p-6 overflow-y-auto mb-4 space-y-4">
+                    <!-- Chat messages will be injected here -->
+                    <div class="flex items-start gap-4">
+                        <div
+                            class="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-black font-bold">
+                            AI</div>
+                        <div class="bg-gray-800 p-4 rounded-2xl rounded-tl-none max-w-[80%]">
+                            Hello. I am the Dr. HOMIE Pre-clinical AGENT. Explain your symptoms.
+                            <br><span class="text-xs text-gray-500 mt-2 block">I am not a doctor. In emergencies,
+                                call
+                                108.</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex gap-4">
+                    <input type="text" id="chat-input" placeholder="Describe your symptoms (e.g., fever, headache)..."
+                        class="flex-1 bg-gray-900 border border-gray-700 rounded-full px-6 py-4 focus:outline-none focus:border-primary">
+                    <button id="send-btn"
+                        class="bg-primary hover:bg-primary/80 text-black font-bold p-4 rounded-full transition-colors">
+                        <i data-lucide="send" class="w-6 h-6"></i>
+                    </button>
+                </div>
+        </section>
+
+        <!-- MAP VIEW -->
+        <!-- MAP VIEW -->
+        <section id="map" class="page-section hidden pt-24 px-4 h-screen flex flex-col">
+            <div class="flex justify-between items-center mb-6 max-w-7xl mx-auto w-full">
+                <h2 class="text-3xl font-bold text-blue-400 flex items-center gap-3">
+                    <i data-lucide="map" class="w-8 h-8"></i> Nearby Clinics
+                </h2>
+                <button id="locate-btn"
+                    class="bg-blue-500 hover:bg-blue-400 text-black font-bold py-2 px-4 rounded-full flex items-center gap-2 transition-colors">
+                    <i data-lucide="crosshair" class="w-4 h-4"></i> Use My Location
+                </button>
+            </div>
+
+            <div class="flex-1 max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-3 gap-6 overflow-hidden pb-6">
+                <!-- Map Container -->
+                <div class="lg:col-span-2 glass-panel overflow-hidden relative rounded-2xl border border-blue-500/20">
+                    <div id="basemap-view" class="w-full h-full min-h-[400px] z-0"></div>
+                </div>
+
+                <!-- Clinic List -->
+                <div class="glass-panel p-4 overflow-y-auto space-y-4 bg-black/40">
+                    <h3
+                        class="text-lg font-semibold mb-2 sticky top-0 bg-black/80 p-2 z-10 backdrop-blur-md rounded-lg border border-white/5">
+                        Emergency & Urgent Care
+                    </h3>
+                    <div id="clinic-list" class="space-y-3">
+                        <!-- Injected via JS -->
+                        <div class="text-center text-gray-500 py-10">
+                            <i data-lucide="loader" class="w-8 h-8 animate-spin mx-auto mb-2"></i>
+                            Loading nearby data...
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Placeholders for other sections -->
+        <!-- DOCTORS SECTION -->
+        <section id="doctors" class="page-section hidden pt-24 px-4 min-h-screen">
+            <div class="max-w-7xl mx-auto">
+                <div class="text-center mb-12">
+                    <h2 class="text-4xl font-bold mb-4 flex items-center justify-center gap-3">
+                        <i data-lucide="stethoscope" class="text-green-400 w-10 h-10"></i>
+                        <span class="text-gradient">Top Specialists</span>
+                    </h2>
+                    <p class="text-gray-400 max-w-2xl mx-auto">
+                        Connect with certified doctors instantly via Chat, Audio, or Video Call.
+                        AI-verified credentials.
+                    </p>
+                </div>
+
+                <!-- Filters -->
+                <div class="flex overflow-x-auto gap-4 mb-8 justify-center pb-2">
+                    <button class="px-6 py-2 rounded-full bg-primary text-black font-bold">All</button>
+                    <button
+                        class="px-6 py-2 rounded-full border border-white/10 hover:bg-white/10 transition-colors">Cardiologists</button>
+                    <button
+                        class="px-6 py-2 rounded-full border border-white/10 hover:bg-white/10 transition-colors">Dermatologists</button>
+                    <button
+                        class="px-6 py-2 rounded-full border border-white/10 hover:bg-white/10 transition-colors">General</button>
+                </div>
+
+                <!-- Doctor Grid -->
+                <div id="doctor-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <!-- Injected via JS -->
+                    <div class="col-span-full text-center py-20 text-gray-500 animate-pulse">
+                        Loading Doctors...
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PHARMACY SECTION -->
+        <section id="medicines" class="page-section hidden pt-24 px-4 min-h-screen">
+            <div class="max-w-7xl mx-auto">
+                <div class="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
+                    <h2 class="text-4xl font-bold flex items-center gap-3">
+                        <i data-lucide="pill" class="text-yellow-400 w-10 h-10"></i>
+                        <span class="text-gradient">Pharmacy</span>
+                    </h2>
+
+                    <div class="flex items-center gap-4 w-full md:w-auto">
+                        <div class="relative flex-1 md:w-64">
+                            <i data-lucide="search"
+                                class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4"></i>
+                            <input type="text" id="med-search" placeholder="Search medicines..."
+                                class="w-full bg-white/5 border border-white/10 rounded-full py-2 pl-10 pr-4 focus:border-yellow-400 outline-none transition-colors">
+                        </div>
+                        <button
+                            class="bg-yellow-400 text-black px-4 py-2 rounded-full font-bold flex items-center gap-2 hover:bg-yellow-300 transition-colors"
+                            onclick="alert('Cart Checkout Coming Soon')">
+                            <i data-lucide="shopping-cart" class="w-5 h-5"></i>
+                            <span id="cart-count">0</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Products Grid -->
+                <div id="med-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+                    <!-- Injected via JS -->
+                    <div class="col-span-full text-center py-20 text-gray-500 animate-pulse">
+                        Loading Pharmacy...
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SCHEMES SECTION -->
+        <section id="schemes" class="page-section hidden pt-24 px-4 min-h-screen">
+            <div class="max-w-7xl mx-auto">
+                <h2 class="text-4xl font-bold mb-10 flex items-center justify-center gap-3">
+                    <i data-lucide="building-2" class="text-orange-400 w-10 h-10"></i>
+                    <span class="text-gradient">Government Schemes</span>
+                </h2>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <!-- Schemes List -->
+                    <div class="lg:col-span-2 space-y-6">
+                        <h3 class="text-2xl font-bold mb-6 text-orange-400">Healthcare Initiatives</h3>
+                        <div id="schemes-list" class="space-y-4">
+                            <!-- Injected via JS -->
+                        </div>
+                    </div>
+
+                    <!-- News Sidebar -->
+                    <div class="glass-panel p-6 h-fit sticky top-24">
+                        <h3 class="text-xl font-bold mb-6 flex items-center gap-2">
+                            <i data-lucide="bell" class="w-5 h-5 text-primary"></i> Latest Updates
+                        </h3>
+                        <div id="news-list" class="space-y-4">
+                            <!-- Injected via JS -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- IoT SECTION -->
+        <section id="iot" class="page-section hidden pt-32 px-4">
+            <div class="max-w-4xl mx-auto">
+                <div class="flex justify-between items-center mb-8">
+                    <h2 class="text-4xl font-bold flex items-center gap-3">
+                        <i data-lucide="activity" class="text-purple-400"></i> IoT Vitals Monitor
+                    </h2>
+                    <!-- Toggle Button handled by JS Class now -->
+                    <button id="iot-toggle"
+                        class="bg-gray-700 w-16 h-8 rounded-full relative transition-colors cursor-pointer"
+                        onclick="window.toggleIoT(this)">
+                        <div class="bg-white w-6 h-6 rounded-full absolute top-1 left-1 transition-transform"></div>
+                    </button>
+                </div>
+
+                <div id="iot-dashboard"
+                    class="glass-panel p-10 opacity-50 pointer-events-none grayscale transition-all text-center min-h-[400px]">
+                    <i data-lucide="wifi-off" class="w-16 h-16 mx-auto mb-4 text-gray-500"></i>
+                    <h3 class="text-2xl font-bold mb-2">Device Disconnected</h3>
+                    <p class="text-gray-400">Please toggle ON to connect to your wearable device.</p>
+                </div>
+            </div>
+        </section>
+
+
+    </main>
+
+    <!-- Register Modal -->
+    <div id="register-modal"
+        class="fixed inset-0 z-[60] hidden bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="glass-panel p-8 w-full max-w-lg relative animate-fade-in">
+            <button onclick="document.getElementById('register-modal').classList.add('hidden')"
+                class="absolute top-4 right-4 text-gray-400 hover:text-white">
+                <i data-lucide="x" class="w-6 h-6"></i>
+            </button>
+
+            <h2 class="text-3xl font-bold mb-2 text-primary">Doctor Registration</h2>
+            <div
+                class="bg-yellow-500/10 border border-yellow-500/50 text-yellow-200 px-4 py-3 rounded-lg text-sm font-bold mb-6 flex items-start gap-3">
+                <i data-lucide="alert-triangle" class="w-5 h-5 flex-shrink-0 mt-0.5"></i>
+                <div>
+                    <div>Only for Doctors</div>
+                    <div class="font-normal text-yellow-200/80 mt-1">Details submitted here will be publicly
+                        displayed for service.</div>
+                </div>
+            </div>
+
+            <form id="register-form" class="space-y-4">
+                <div>
+                    <label class="block text-sm text-gray-400 mb-1">Full Name</label>
+                    <input type="text" name="name" required placeholder="Dr. Jane Doe"
+                        class="w-full bg-gray-800 border border-gray-700 rounded-lg p-3 focus:border-primary outline-none">
+                </div>
+                <div>
+                    <label class="block text-sm text-gray-400 mb-1">Specialty</label>
+                    <select name="speciality" required
+                        class="w-full bg-gray-800 border border-gray-700 rounded-lg p-3 focus:border-primary outline-none text-white">
+                        <option value="" disabled selected>Select Speciality</option>
+                        <option value="Cardiology">Cardiology</option>
+                        <option value="Dermatology">Dermatology</option>
+                        <option value="Neurology">Neurology</option>
+                        <option value="Orthopedics">Orthopedics</option>
+                        <option value="Pediatrics">Pediatrics</option>
+                        <option value="Psychiatry">Psychiatry</option>
+                        <option value="General Doctor">General Doctor</option>
+                        <option value="ENT">ENT</option>
+                        <option value="Gynecology">Gynecology</option>
+                    </select>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm text-gray-400 mb-1">Phone</label>
+                        <input type="tel" name="phone" required placeholder="+1 234..."
+                            class="w-full bg-gray-800 border border-gray-700 rounded-lg p-3 focus:border-primary outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-sm text-gray-400 mb-1">Email</label>
+                        <input type="email" name="email" required placeholder="doctor@example.com"
+                            class="w-full bg-gray-800 border border-gray-700 rounded-lg p-3 focus:border-primary outline-none">
+                    </div>
+                </div>
+
+                <button type="submit"
+                    class="w-full bg-primary text-black font-bold py-3 rounded-lg hover:shadow-[0_0_20px_rgba(0,242,234,0.4)] transition-all mt-4">
+                    Register
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Appointment Booking Modal -->
+    <div id="booking-modal"
+        class="fixed inset-0 z-[60] hidden bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="glass-panel p-8 w-full max-w-md relative animate-fade-in">
+            <button onclick="document.getElementById('booking-modal').classList.add('hidden')"
+                class="absolute top-4 right-4 text-gray-400 hover:text-white">
+                <i data-lucide="x" class="w-6 h-6"></i>
+            </button>
+
+            <h2 class="text-2xl font-bold mb-1 text-white">Book Appointment</h2>
+            <p class="text-sm text-gray-400 mb-6" id="booking-doctor-name">With Dr. ...</p>
+
+            <form id="booking-form" class="space-y-4">
+                <input type="hidden" name="doctorId" id="booking-doctor-id">
+
+                <div>
+                    <label class="block text-sm text-gray-400 mb-1">Your Email</label>
+                    <input type="email" name="userEmail" required placeholder="you@example.com"
+                        class="w-full bg-gray-800 border border-gray-700 rounded-lg p-3 focus:border-primary outline-none">
+                </div>
+
+                <div>
+                    <label class="block text-sm text-gray-400 mb-1">Preferred Time</label>
+                    <input type="datetime-local" name="time" required
+                        class="w-full bg-gray-800 border border-gray-700 rounded-lg p-3 focus:border-primary outline-none text-white scheme-dark">
+                </div>
+
+                <button type="submit"
+                    class="w-full bg-green-500 hover:bg-green-400 text-black font-bold py-3 rounded-lg hover:shadow-[0_0_20px_rgba(74,222,128,0.4)] transition-all mt-4">
+                    Confirm Booking
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- App Logic -->
+    <script type="module" src="js/components.js?v=2"></script>
+    <script type="module" src="js/agent.js?v=2"></script>
+    <script type="module" src="js/app.js?v=2"></script>
+    <script>
+        // IoT Toggle Logic (Simple Inline for now)
+        window.toggleIoT = function (btn) {
+            const dash = document.getElementById('iot-dashboard');
+            const isActive = btn.classList.toggle('bg-primary');
+            btn.querySelector('div').style.transform = isActive ? 'translateX(32px)' : 'translateX(0)';
+
+            if (isActive) {
+                dash.classList.remove('opacity-50', 'pointer-events-none', 'grayscale');
+                dash.innerHTML = `
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div class="bg-gray-800/50 p-6 rounded-xl">
+                            <div class="text-sm text-gray-400">Heart Rate</div>
+                            <div class="text-4xl font-bold text-red-500">72 <span class="text-sm">BPM</span></div>
+                        </div>
+                        <div class="bg-gray-800/50 p-6 rounded-xl">
+                            <div class="text-sm text-gray-400">Oxygen Level</div>
+                            <div class="text-4xl font-bold text-blue-500">98%</div>
+                        </div>
+                        <div class="bg-gray-800/50 p-6 rounded-xl">
+                            <div class="text-sm text-gray-400">Temperature</div>
+                            <div class="text-4xl font-bold text-yellow-500">98.6°F</div>
+                        </div>
+                    </div>
+                `;
+            } else {
+                dash.classList.add('opacity-50', 'pointer-events-none', 'grayscale');
+                dash.innerHTML = `
+                    <i data-lucide="wifi-off" class="w-16 h-16 mx-auto mb-4 text-gray-500"></i>
+                    <h3 class="text-2xl font-bold mb-2">Device Disconnected</h3>
+                    <p>Please toggle ON to connect to your wearable device.</p>
+                `;
+                lucide.createIcons();
+            }
+        }
+    </script>
+</body>
+
+</html>

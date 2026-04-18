@@ -1,0 +1,148 @@
+:root {
+    /* Ultra-Premium Dark Health Palette */
+    --bg-dark: #050505;
+    --surface: #0a0a0a;
+    --surface-glass: rgba(20, 20, 20, 0.6);
+    --primary: #00f2ea;
+    --primary-glow: rgba(0, 242, 234, 0.4);
+    --secondary: #ff0055;
+    --text-main: #ffffff;
+    --text-muted: #a3a3a3;
+    --border-light: rgba(255, 255, 255, 0.1);
+    --success: #00ff9d;
+    --warning: #ffbf00;
+
+    /* Font */
+    --font-family: 'Outfit', sans-serif;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: var(--bg-dark);
+    color: var(--text-main);
+    font-family: var(--font-family);
+    overflow-x: hidden;
+    line-height: 1.6;
+}
+
+/* Utilities */
+.glass-panel {
+    background: var(--surface-glass);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--border-light);
+    border-radius: 16px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+}
+
+.text-gradient {
+    background: linear-gradient(135deg, #ffffff 0%, var(--text-muted) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.neon-text {
+    text-shadow: 0 0 10px var(--primary-glow);
+}
+
+/* Animations */
+@keyframes float {
+    0% {
+        transform: translateY(0px);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
+
+    100% {
+        transform: translateY(0px);
+    }
+}
+
+.animate-float {
+    animation: float 6s ease-in-out infinite;
+}
+
+.fade-in-up {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+.fade-in-up.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Layout */
+.app-container {
+    position: relative;
+    min-height: 100vh;
+}
+
+/* Sections */
+.page-section {
+    display: none;
+    /* SPA Toggle */
+    min-height: 100vh;
+    padding: 80px 20px;
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+.page-section.active {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.98);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Buttons */
+.btn-primary {
+    background: linear-gradient(90deg, var(--primary), #00c2bb);
+    color: #000;
+    padding: 12px 24px;
+    border-radius: 50px;
+    font-weight: 700;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.btn-primary:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 20px var(--primary-glow);
+}
+
+/* Fixes */
+.hidden {
+    display: none !important;
+}
+
+/* Ensure background doesn't steal clicks */
+#home .absolute.inset-0 {
+    pointer-events: none;
+}
+
+/* Re-enable pointer events for the 3D viewer itself if needed, but usually we want it background only */
+spline-viewer {
+    pointer-events: auto;
+    /* Or none if purely decorative */
+}
